@@ -1,5 +1,5 @@
-
 import { handleActions } from 'redux-actions'
+import * as types from '../actions/todos'
 
 const initialState = [{
   text: 'Use Redux',
@@ -8,7 +8,7 @@ const initialState = [{
 }]
 
 export default handleActions({
-  'add todo' (state, action) {
+  [types.addTodo] (state, action) {
     return [{
       id: state.reduce((maxId, todo) => Math.max(todo.id, maxId), -1) + 1,
       completed: false,
@@ -16,11 +16,11 @@ export default handleActions({
     }, ...state]
   },
 
-  'delete todo' (state, action) {
+  [types.deleteTodo] (state, action) {
     return state.filter(todo => todo.id !== action.payload )
   },
 
-  'edit todo' (state, action) {
+  [types.editTodo] (state, action) {
     return state.map(todo => {
       return todo.id === action.payload.id
         ? { ...todo, text: action.payload.text }
@@ -28,7 +28,7 @@ export default handleActions({
     })
   },
 
-  'complete todo' (state, action) {
+  [types.completeTodo] (state, action) {
     return state.map(todo => {
       return todo.id === action.payload
         ? { ...todo, completed: !todo.completed }
@@ -36,7 +36,7 @@ export default handleActions({
     })
   },
 
-  'complete all' (state, action) {
+  [types.completeAll] (state, action) {
     const areAllMarked = state.every(todo => todo.completed)
     return state.map(todo => {
       return {
@@ -46,7 +46,7 @@ export default handleActions({
     })
   },
 
-  'clear complete' (state, action) {
+  [types.clearCompleted] (state, action) {
     return state.filter(todo => todo.completed === false)
   }
 }, initialState)
